@@ -1,0 +1,8 @@
+POST http://localhost:3001/api/todos
+Content-Type: application/json
+
+{
+    "task": "Käy kaupassa",
+    "id": 4,
+    "check": false
+}
