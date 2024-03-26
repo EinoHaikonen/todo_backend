@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
+const ToDo = require('./models/database')
 
 app.use(express.json())
 app.use(cors())
@@ -10,23 +11,7 @@ app.use(cors())
     Jos löytyy, palauttaa Express tiedoston. */
 app.use(express.static('build'))
 
-let todos = [
-    {
-        "task": "Tiskaa",
-        "id": 1,
-        "check": false
-    },
-    {
-        "task": "Imuroi",
-        "id": 2,
-        "check": false
-    },
-    {
-        "task": "Jotain",
-        "id": 3,
-        "check": false
-    }
-]
+
 
 /*
 
@@ -37,30 +22,36 @@ Tästä alkaa polkujen määrittelyt
 
 // Kaikkien tietojen haku
 app.get('/api/todos', (request, response) => {
+    ToDo.find ({}).then(todos => {
     response.json(todos)
+    })
 })
 
 
 // Yksittäisen todo:n haku
 app.get('/api/todos/:id', (request, response) => {
-    const id = Number(request.params.id)
-    const todo = todos.find(todo => todo.id === id)
-
-    if (todo) {
-        response.json(todo)
-    } else {
-        response.status(404).end()
-    }
+    const id = request.params.id
+    ToDo.findById(id)
+    .then(todo => {
+        if (todo) {
+            response.json(todo)
+        } else {
+            response.status(404).end()
+        }
+    })
 })
 
 
 // Yksittäisen todo:n poisto
-app.delete('/api/todos/:id', (request, response) => {
-    const id = Number(request.params.id)
-    todos = todos.filter(todo => todo.id !== id)
-  
-    response.status(204).end()
+app.delete('/api/todos/:id', (request, response, next) => {
+    const id = request.params.id
+    ToDo.findByIdAndDelete(id)
+    .then(result => {
+        response.status(204).end()
+    })
+    .catch(error => next(error))
 })
+
 
 // Uuden id:n generointi funktio
 const generateId = () => {
@@ -72,32 +63,32 @@ const generateId = () => {
     return maxId + 1
 }
 
+
 // Uuden todon: teko
-app.post('/api/todos', (request, response) => {
-    
-    const todo = {
+app.post('/api/todos', (request, response) => {   
+    const todo = new ToDo({
         task: request.body.task,
-        id: generateId(),
+        id: 10,
         check: false
-    }
-
-    todos = todos.concat(todo)
-
-    console.log(todo)
+    })
+    todo.save().then(result => {
     response.json(todo)
+    })
 })
+
 
 // Check merkin muutos
 app.put('/api/todos/:id', (request, response) => {
-    const id = Number(request.params.id)
-    const updatedTodos = todos.map(toDo => {
-        if (toDo.id === id) {
-          toDo.check = !toDo.check
-        } return toDo
-      })
-      todos = updatedTodos
-      response.json(todos)
+    const id = request.params.id
+    ToDo.findByIdAndUpdate(id)
+    .then(todo => {
+        todo.check = !todo.check
+        todo.save().then(result => {
+            response.json(result)
+        })
+    })
 })
+
 
 const PORT = 3001
 app.listen(PORT)
