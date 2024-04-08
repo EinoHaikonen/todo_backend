@@ -1,8 +1,8 @@
-POST http://localhost:3001/api/todos
+POST http://localhost:3001/api/users
 Content-Type: application/json
 
 {
-    "task": "Käy kaupassa",
-    "check": false,
-    "user": "6613e4642125c9e2f589536a"
-}
+      "task": "jossain",
+      "check": false,
+      "userId": "4432432h323h2h222"
+    }
