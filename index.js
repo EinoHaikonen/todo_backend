@@ -3,6 +3,8 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const ToDo = require('./models/database')
+const usersRouter = require('./controllers/users')
+const User = require('./models/user')
 
 app.use(express.json())
 app.use(cors())
@@ -11,6 +13,7 @@ app.use(cors())
     Express GET-tyyppisten HTTP-pyyntöjen yhteydessä tarkastetaan ensin löytyykö pyynnön polkua vastaavan nimistä tiedostoa hakemistosta build. 
     Jos löytyy, palauttaa Express tiedoston. */
 app.use(express.static('build'))
+app.use('/api/users', usersRouter)
 
 
 
@@ -73,11 +76,15 @@ ToDo.find ({}).then(todos => {
 
 // Uuden todon: teko
 app.post('/api/todos', async (request, response) => {   
+    const user = await User.findById(request.body.userId)
     const todo = new ToDo({
         task: request.body.task,
-        check: false
+        check: false,
+        user: user._id
     })
     const savedTodo = await todo.save();
+    user.todos = user.todos.concat(savedTodo._id)
+    await user.save()
     response.json(savedTodo)
 })
 

@@ -3,6 +3,6 @@ Content-Type: application/json
 
 {
     "task": "Käy kaupassa",
-    "id": 4,
-    "check": false
+    "check": false,
+    "user": "456123"
 }

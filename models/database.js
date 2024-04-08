@@ -16,9 +16,13 @@ mongoose.connect(url)
   })
 
 const todoSchema = new mongoose.Schema({
-  task: String,
-  id: Number,
-  check: Boolean
+    task: String,
+    id: Number,
+    check: Boolean,
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    }
 })
 
 todoSchema.set('toJSON', {
