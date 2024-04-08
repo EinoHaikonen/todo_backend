@@ -9,7 +9,7 @@ const userSchema = mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Todo'
     }
-  ],
+  ]
 })
 
 userSchema.set('toJSON', {
