@@ -1,3 +1,4 @@
+// Express on http:tä miellyttävämmän ohjelmointirajapinnan tarjoava kirjasto.
 const express = require('express')
 const app = express()
 const cors = require('cors')
@@ -21,72 +22,73 @@ Tästä alkaa polkujen määrittelyt
 
 
 // Kaikkien tietojen haku
-app.get('/api/todos', (request, response) => {
-    ToDo.find ({}).then(todos => {
+app.get('/api/todos', async (request, response) => {
+    const todos = await ToDo.find({})
     response.json(todos)
-    })
 })
 
 
 // Yksittäisen todo:n haku
-app.get('/api/todos/:id', (request, response) => {
+app.get('/api/todos/:id', async (request, response) => {
     const id = request.params.id
-    ToDo.findById(id)
-    .then(todo => {
+    const todo = await ToDo.findById(id)
         if (todo) {
             response.json(todo)
         } else {
             response.status(404).end()
         }
     })
-})
 
 
 // Yksittäisen todo:n poisto
-app.delete('/api/todos/:id', (request, response, next) => {
+app.delete('/api/todos/:id', async (request, response, next) => {
     const id = request.params.id
-    ToDo.findByIdAndDelete(id)
-    .then(result => {
+    try {
+        await ToDo.findByIdAndDelete(id)
         response.status(204).end()
-    })
-    .catch(error => next(error))
+    } catch (error) {
+        next(error)
+        }
 })
 
 
 // Uuden id:n generointi funktio
-const generateId = () => {
+/*const generateId = () => {
     const maxId = todos.length > 0
     // Taulukko muutettu luvuiksi (...todos) 
     // koska taulukko ei kelpaa Math.maxi:lle
     ? Math.max(...todos.map(todo => todo.id)) 
     : 0
     return maxId + 1
-}
+} */
 
+/*const generateId = () => {
+ToDo.find ({}).then(todos => {
+    const maxId = todos.length > 0
+    ? Math.max(...todos.map(todo => todo.id)) 
+    : 0
+    return maxId + 1
+    })
+}*/
 
 // Uuden todon: teko
-app.post('/api/todos', (request, response) => {   
+app.post('/api/todos', async (request, response) => {   
     const todo = new ToDo({
         task: request.body.task,
-        id: 10,
         check: false
     })
-    todo.save().then(result => {
-    response.json(todo)
-    })
+    const savedTodo = await todo.save();
+    response.json(savedTodo)
 })
 
 
 // Check merkin muutos
-app.put('/api/todos/:id', (request, response) => {
+app.put('/api/todos/:id', async (request, response) => {
     const id = request.params.id
-    ToDo.findByIdAndUpdate(id)
-    .then(todo => {
-        todo.check = !todo.check
-        todo.save().then(result => {
-            response.json(result)
-        })
-    })
+    const todo = await ToDo.findByIdAndUpdate(id)
+    todo.check = !todo.check
+    const savedTodo = await todo.save()
+    response.json(savedTodo)
 })
 
 
