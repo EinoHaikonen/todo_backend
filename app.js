@@ -5,6 +5,7 @@ const cors = require('cors')
 const todosRouter = require('./controllers/todos')
 const usersRouter = require('./controllers/users')
 const mongoose = require('mongoose')
+const loginRouter = require('./controllers/login')
 const url = 'mongodb+srv://einohaikonen:ToDoHarjoitus@cluster0.io67a9t.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
 
 mongoose.set('strictQuery', false)
@@ -26,5 +27,6 @@ app.use(express.static('build'))
 app.use(express.json())
 app.use('/api/todos', todosRouter)
 app.use('/api/users', usersRouter)
+app.use('/api/login', loginRouter)
 
 module.exports = app

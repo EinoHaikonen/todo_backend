@@ -1,6 +1,8 @@
+const jwt = require('jsonwebtoken')
 const todosRouter = require('express').Router()
 const Todo = require('../models/todo')
 const User = require('../models/user')
+require('dotenv').config()
 
 /*
 
@@ -60,9 +62,24 @@ ToDo.find ({}).then(todos => {
 }*/
 
 // Uuden todon: teko
+
+const getTokenFrom = request => {
+    const authorization = request.get('authorization')
+    if (authorization && authorization.startsWith('Bearer ')) {
+      return authorization.replace('Bearer ', '')
+    }
+    return null
+}
+
 todosRouter.post('/', async (request, response) => {  
-    const body = request.body 
-    const user = await User.findById(body.userId)
+    const body = request.body
+    
+    const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+    if (!decodedToken.id) {
+    return response.status(401).json({ error: 'token invalid' })
+    }
+    const user = await User.findById(decodedToken.id)
+
     const todo = new Todo({
         task: body.task,
         check: body.check,
