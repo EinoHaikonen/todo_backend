@@ -1,8 +1,8 @@
-POST http://localhost:3001/api/users
+POST http://localhost:3001/api/todos
 Content-Type: application/json
 
 {
-      "task": "jossain",
+      "task": "Tehtävä 2",
       "check": false,
-      "userId": "4432432h323h2h222"
+      "userId": "66142d41eec912a9bdaeb7b7"
     }
