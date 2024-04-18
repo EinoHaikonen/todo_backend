@@ -1,12 +1,12 @@
-const mongoose = require('mongoose')
+//const mongoose = require('mongoose')
 /*
 const url = process.env.MONGODB_URI
 */
-const url = 'mongodb+srv://einohaikonen:ToDoHarjoitus@cluster0.io67a9t.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+//const url = 'mongodb+srv://einohaikonen:ToDoHarjoitus@cluster0.io67a9t.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
 
-mongoose.set('strictQuery', false)
+//mongoose.set('strictQuery', false)
 
-console.log('connecting to', url)
+/*console.log('connecting to', url)
 mongoose.connect(url).then(() => {
 
 
@@ -23,3 +23,4 @@ mongoose.connect(url).then(() => {
     mongoose.connection.close()
   })
 })
+*/

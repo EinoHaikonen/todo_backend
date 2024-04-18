@@ -1,3 +1,4 @@
+// Kirjasto, jonka avulla generoidaan json web tokeneja.
 const jwt = require('jsonwebtoken')
 const todosRouter = require('express').Router()
 const Todo = require('../models/todo')

@@ -1,6 +1,7 @@
 // Express on http:tä miellyttävämmän ohjelmointirajapinnan tarjoava kirjasto.
 const express = require('express')
 const app = express()
+// Middleware Cors mahdollistaa kommunikoinnin eri originissa olevan palvelimen kanssa
 const cors = require('cors')
 const todosRouter = require('./controllers/todos')
 const usersRouter = require('./controllers/users')
